@@ -31,17 +31,16 @@ public class SecurityConfiguration {
 
   @Bean
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(
-        (requests) ->
-            requests
-                .requestMatchers("/private/**")
-                .authenticated()
-                .requestMatchers("/public/**")
-                .permitAll()
-                .requestMatchers("/restricted/**")
-                .denyAll()
-                .anyRequest()
-                .authenticated());
+    http.authorizeHttpRequests(requests ->
+        requests
+            .requestMatchers("/private/**")
+            .authenticated()
+            .requestMatchers("/public/**")
+            .permitAll()
+            .requestMatchers("/restricted/**")
+            .denyAll()
+            .anyRequest()
+            .authenticated());
     http.sessionManagement(
         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     http.httpBasic(withDefaults());

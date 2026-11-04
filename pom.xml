@@ -17,7 +17,9 @@
   <description>spring-security-basic-auth-in-memory-demo</description>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>27</java.version>
+    <!-- Spring Boot's repackage plugin cannot read Java 27 class files (major 71) -->
+    <maven.compiler.release>25</maven.compiler.release>
   </properties>
   <dependencies>
     <dependency>

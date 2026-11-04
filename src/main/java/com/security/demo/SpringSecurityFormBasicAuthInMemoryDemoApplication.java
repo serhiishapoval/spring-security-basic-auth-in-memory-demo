@@ -9,5 +9,4 @@ public class SpringSecurityFormBasicAuthInMemoryDemoApplication {
   public static void main(String[] args) {
     SpringApplication.run(SpringSecurityFormBasicAuthInMemoryDemoApplication.class, args);
   }
-
 }

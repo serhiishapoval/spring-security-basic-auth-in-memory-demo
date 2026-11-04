@@ -39,7 +39,7 @@ public class SpringSecurityTestController {
   }
 
   @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  //@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+  // @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
   @GetMapping("/user-admin/details")
   public String getUserAndAdminDetails(@AuthenticationPrincipal final UserDetails userDetails) {
     return "User-Admin details endpoint. Current User: " + userDetails.getUsername();
