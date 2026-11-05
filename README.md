@@ -14,6 +14,7 @@ The project is a learning demo. It stores passwords in plain text and is not mea
 - [Users](#users)
 - [Endpoints and access rules](#endpoints-and-access-rules)
 - [Running locally](#running-locally)
+- [Running the tests](#running-the-tests)
 - [Trying it out](#trying-it-out)
 - [How security is configured](#how-security-is-configured)
 - [Build notes](#build-notes)
@@ -61,7 +62,8 @@ The entry point class keeps the name `SpringSecurityFormBasicAuthInMemoryDemoApp
 - Java 27 (`java.version`), compiled with `maven.compiler.release` **25**
 - Spring Boot 3.5.7 (parent POM)
 - Spring Boot Starter Security and Starter Web
-- Spring Security Test (test scope, declared but no tests yet)
+- JUnit 6.1.3 and Mockito 5.24.0 for unit tests (pinned in `pom.xml`, included through `spring-boot-starter-test`)
+- Spring Security Test (test scope, declared but not used by the current tests)
 - Maven
 
 ---
@@ -116,6 +118,18 @@ mvn spring-boot:run
 ```
 
 The application starts on http://localhost:8080.
+
+---
+
+## Running the tests
+
+```bash
+mvn test
+```
+
+The unit tests live in `src/test/java`. `SecurityConfigurationTest` checks the two in-memory users: their passwords, their roles, and the rejection of an unknown user. The tests start no server and need no network access.
+
+The endpoint access rules in the table above are not covered by these tests. Checking them needs a `MockMvc` test that runs the full security filter chain, and the project does not have one yet.
 
 ---
 
@@ -200,7 +214,8 @@ An `InMemoryUserDetailsManager` with the two users above. The `userExists` check
 - `java.version` is 27. The compiler targets `maven.compiler.release` **25**. Spring Boot's repackage plugin cannot read Java 27 class files (major version 71), so the build must target 25.
 - The project has no Lombok dependency.
 - Sources follow google-java-format style (IntelliJ setting in `.idea/google-java-format.xml`).
-- There are no unit or integration tests yet. `spring-security-test` is on the classpath for future tests.
+- Unit tests use JUnit 6 and Mockito 5. Their versions are pinned in `pom.xml` (`junit-jupiter.version`, `mockito.version`). `byte-buddy.version` is pinned to 1.18.17 so that Mockito can mock classes on Java 27.
+- There are no integration tests. `spring-security-test` is on the test classpath for future use.
 
 ---
 
@@ -215,4 +230,4 @@ This is a demo. The following are known gaps.
 - **Redundant checks.** `userDetailsService()` checks `userExists` before each `createUser`, but the manager is new and empty, so the checks have no effect.
 - **Unused annotation.** `@RolesAllowed` (JSR-250) is enabled but no method uses it.
 - **Mixed role syntax.** `hasRole('USER')` in `@PreAuthorize` and `@Secured("ROLE_USER")` both work, but they use different conventions (the `ROLE_` prefix is added automatically in one case and must be written in the other).
-- **No tests.** The project has no tests, so the access rules above are verified only by running the app.
+- **Few tests.** One unit test class covers the in-memory users. The endpoint access rules and method security are not checked by automated tests, so they are verified only by running the app.
